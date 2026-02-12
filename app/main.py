@@ -4,9 +4,6 @@ from . import models
 
 app = FastAPI()
 
-@app.on_event("startup")
-def startup():
-    Base.metadata.create_all(bind=engine)
 
 @app.get("/")
 def read_root():
