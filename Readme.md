@@ -54,4 +54,3 @@ RCSB PDB API
 
 Project Status:
 
-Phase -01 (Backend Foundation Complete)
