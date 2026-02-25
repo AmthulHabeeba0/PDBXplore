@@ -7,47 +7,30 @@ from .database import SessionLocal
 from .models import User
 from .schemas import UserCreate, UserLogin
 from .security import hash_password, verify_password, create_access_token
+from .security import verify_token
+from fastapi.security import OAuth2PasswordBearer
+from .routes.auth_routes import router as auth_router
+from .routes.analysis_routes import router as analysis_router
+from .database import engine
+from fastapi.staticfiles import StaticFiles
+from app.routes import protein_routes
+
+
+
+
 
 app = FastAPI()
 
 Base.metadata.create_all(bind=engine)
 
+
+app.include_router(auth_router)
+app.include_router(analysis_router)
+app.include_router(protein_routes.router)
+app.mount("/static", StaticFiles(directory="app/plots"), name="static")
+
 @app.get("/")
 def read_root():
     return {"message": "PDBXplore Backend Running Successfully with SQL Server"}
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
-@app.post("/register")
-def register(user: UserCreate, db: Session = Depends(get_db)):
-    existing_user = db.query(User).filter(User.email == user.email).first()
-    if existing_user:
-        raise HTTPException(status_code=400, detail="Email already registered")
-
-    new_user = User(
-        username=user.username,
-        email=user.email,
-        hashed_password=hash_password(user.password)
-    )
-
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
-
-    return {"message": "User registered successfully"}
-
-@app.post("/login")
-def login(user: UserLogin, db: Session = Depends(get_db)):
-    db_user = db.query(User).filter(User.email == user.email).first()
-
-    if not db_user or not verify_password(user.password, db_user.hashed_password):
-        raise HTTPException(status_code=401, detail="Invalid credentials")
-
-    access_token = create_access_token(data={"sub": db_user.email})
-
-    return {"access_token": access_token, "token_type": "bearer"}
