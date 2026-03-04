@@ -1,57 +1,93 @@
-PDBXplore 
+PDBXplore
 
-PBDXplore is a full-stack Protein Data Bank with protein structure exploration and 3 Visialization integrating the RSCB Protein data bank API with Ramachandran plot visualization 
+PDBXplore is a full-stack bioinformatics platform designed for exploring protein structures from the RCSB Protein Data Bank and performing structural validation using Ramachandran plot analysis.
 
-Tech Stack:
+The platform integrates protein structural data retrieval, molecular visualization, and structural quality analysis into a unified web application.
 
+It allows users to search proteins, view structural metadata, visualize 3D molecular structures, download PDB files, and perform backbone conformational analysis through Ramachandran plots.
+
+
+Key Features
+
+Protein Exploration
+- Search proteins from the RCSB Protein Data Bank
+- Retrieve structural metadata including:
+  - Title
+  - Authors
+  - Organism
+  - Experimental method
+  - Resolution
+  - Structural classification
+- View static structure previews
+- Integrated 3D molecular viewer
+
+Structural Analysis
+- Upload PDB / ENT protein structure files
+- Automatic phi (φ) and psi (ψ) backbone angle calculation
+- Ramachandran plot generation
+- Structural validation statistics
+
+Authentication & Security
+- User registration and login
+- JWT based authentication
+- Email OTP verification
+- Protected routes for sensitive operations
+
+Data Access
+- Secure PDB file download
+- Ramachandran plot preview and export
+- API-based protein metadata retrieval
+
+Educational Features
+- Protein of the Day (random protein discovery)
+- BioBytes: rotating protein science facts
+
+
+Tech Stack
 Backend
-Python (3.14)
-FastAPI (Web framework)
-Uvicorn (ASGI server)
-SQLAlchemy (ORM)
-PyODBC (Database driver)
-python-dotenv (Environment variables)
-Pydantic (Data validation, built into FastAPI)
+- Python (3.14)
+- FastAPI
+- Uvicorn
+- SQLAlchemy
+- PyODBC
+- python-dotenv
+- Pydantic
+- BioPython
+- NumPy
+- Matplotlib
 
-Database System:
+Database System
 Microsoft SQL Server (Express Edition)
 
-Database Management Tool:
+Database Management Tool
 SQL Server Management Studio (SSMS)
 
-API
-RESTful architecture
-JSON communication
-OpenAPI (auto-generated via FastAPI)
+API Architecture
+- RESTful architecture
+- JSON communication
+- OpenAPI documentation (auto-generated via FastAPI)
 
-Frontend Stack:
-React.js
-Axios (HTTP Client)
-React Router
-Tailwind CSS (or Bootstrap)
-Vite (Build Tool)
 
-External Data Source 
+Frontend Stack
+- React.js
+- Axios
+- React Router
+- Tailwind CSS (or Bootstrap)
+- Vite (Build Tool)
+
+
+External Data Source
+
 RCSB Protein Data Bank API
+Used for:
+- Protein metadata retrieval
+- Structural data access
+- Protein search queries
+- Structure visualization resources
 
 Development Tools
-VS Code
-Virtual Environment (venv)
-Windows OS
 
-
-
-Architecture
-
-React Frontend  
-↓  
-FastAPI Backend  
-↓  
-SQL Server  
-↓  
-RCSB PDB API  
-
-
-Project Status:
-
-Phase -0 (Backend Foundation Complete)
+- Visual Studio Code
+- Python Virtual Environment (venv)
+- Windows OS
+- Git & GitHub
