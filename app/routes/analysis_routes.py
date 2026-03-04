@@ -1,13 +1,12 @@
 from fastapi import APIRouter, UploadFile, File, Depends, HTTPException
-from starlette.responses import FileResponse
+from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 from ..database import get_db
 from ..security import verify_token
-import os
 from ..rama import generate_ramachandran_plot
-from fastapi.responses import FileResponse
 
-
+import os
+import uuid
 
 router = APIRouter(
     prefix="/analysis",
@@ -23,46 +22,48 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 os.makedirs(PLOT_DIR, exist_ok=True)
 
 
-@router.post("/upload")
-def upload_pdb(
-    file: UploadFile = File(...),
-    current_user: str = Depends(verify_token),
-    db: Session = Depends(get_db),
-):
-    # Validate
-    if not file.filename.endswith((".pdb", ".ent")):
-        raise HTTPException(status_code=400, detail="Invalid file type")
-
-    # Save file
-    save_path = os.path.join(UPLOAD_DIR, file.filename)
-    with open(save_path, "wb") as f:
-        f.write(file.file.read())
-
-    return {"message": "File uploaded", "path": save_path}
-
+# =====================================
+# Upload + Generate Rama + Delete PDB
+# =====================================
 
 @router.post("/rama")
-def generate_rama(
-    filename: str,
-    current_user: str = Depends(verify_token)
+async def generate_rama_plot_api(
+    file: UploadFile = File(...),
+    current_user: str = Depends(verify_token),
+    db: Session = Depends(get_db)
 ):
 
-    pdb_path = os.path.join(UPLOAD_DIR, filename)
+    filename = file.filename.lower()
 
-    if not os.path.exists(pdb_path):
-        raise HTTPException(status_code=404, detail="File not found")
     if not filename.endswith((".pdb", ".ent")):
+        raise HTTPException(status_code=400, detail="Invalid file type")
+
+    unique_id = str(uuid.uuid4())
+
+    pdb_filename = f"{unique_id}.pdb"
+    plot_filename = f"{unique_id}_rama.png"
+
+    pdb_path = os.path.join(UPLOAD_DIR, pdb_filename)
+    plot_path = os.path.join(PLOT_DIR, plot_filename)
+
+    # Save uploaded file
+    with open(pdb_path, "wb") as f:
+        f.write(await file.read())
+
+    try:
+        # Generate plot
+        stats = generate_ramachandran_plot(pdb_path, plot_path)
+
+    except Exception as e:
         raise HTTPException(
-        status_code=400,
-        detail="Only .pdb or .ent structure files allowed"
-    )
+            status_code=500,
+            detail=f"Ramachandran generation failed: {str(e)}"
+        )
 
-
-    name = os.path.splitext(filename)[0]
-    output_filename = f"{name}_rama.png"
-    plot_path = os.path.join(PLOT_DIR, output_filename)
-
-    stats = generate_ramachandran_plot(pdb_path, plot_path)
+    finally:
+        # Delete uploaded file
+        if os.path.exists(pdb_path):
+            os.remove(pdb_path)
 
     return {
         "message": "Ramachandran plot generated successfully",
@@ -70,15 +71,19 @@ def generate_rama(
             "total_residues": stats["total_residues"],
             "allowed_percentage": stats["allowed_percentage"]
         },
-        "preview": f"http://127.0.0.1:8000/analysis/preview/{output_filename}",
-        "download": f"http://127.0.0.1:8000/analysis/download/{output_filename}"
+        "preview": f"http://127.0.0.1:8000/analysis/preview/{plot_filename}",
+        "download": f"http://127.0.0.1:8000/analysis/download/{plot_filename}"
     }
 
 
-    
+# =====================================
+# Preview Plot
+# =====================================
+
 @router.get("/preview/{filename}")
 def preview_plot(filename: str):
-    file_path = os.path.join("app/plots", filename)
+
+    file_path = os.path.join(PLOT_DIR, filename)
 
     if not os.path.exists(file_path):
         raise HTTPException(status_code=404, detail="File not found")
@@ -87,14 +92,16 @@ def preview_plot(filename: str):
         file_path,
         media_type="image/png"
     )
-    
+
+
+# =====================================
+# Download Plot
+# =====================================
+
 @router.get("/download/{filename}")
 def download_plot(filename: str):
 
-    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    plot_dir = os.path.join(BASE_DIR, "plots")
-
-    file_path = os.path.join(plot_dir, filename)
+    file_path = os.path.join(PLOT_DIR, filename)
 
     if not os.path.exists(file_path):
         raise HTTPException(status_code=404, detail="File not found")
@@ -104,6 +111,3 @@ def download_plot(filename: str):
         media_type="image/png",
         filename=filename
     )
-
-
-
