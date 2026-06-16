@@ -89,7 +89,7 @@ PDBXplore/
 
 Environment Variables-
 Create a '.env' file in the project root:
-
+```
 env
 SECRET_KEY=your-secret-key-here
 DATABASE_URL=your-database-connection-string
@@ -97,7 +97,7 @@ EMAIL_ADDRESS=your-gmail-address
 EMAIL_PASSWORD=your-gmail-app-password
 ENVIRONMENT=development
 ALLOWED_ORIGINS=http://localhost:5173
-
+```
 
 | Variable | Description |
 |---|---|
@@ -110,7 +110,7 @@ ALLOWED_ORIGINS=http://localhost:5173
 
 
 Getting Started:
-
+```
 Backend-
 bash:
 #Create and activate virtual environment
@@ -148,7 +148,7 @@ ENVIRONMENT=production
 ALLOWED_ORIGINS=https://your-frontend-domain.com
 
 The backend requires a persistent server (Render, Railway, Fly.io, etc.) since it runs a Python process continuously. The frontend can be deployed as a static site after running 'npm run build'.
-
+```
 
 
 Author - 
