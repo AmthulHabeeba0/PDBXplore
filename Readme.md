@@ -59,7 +59,7 @@ RCSB PDB API— protein metadata, search, structure previews, PDB file downloads
 
 
 Project Structure-
-
+```
 PDBXplore/
 ├── app/
 │   ├── routes/
@@ -85,10 +85,10 @@ PDBXplore/
 │       └── config.js            # Centralised API base URL
 ├── requirements.txt
 └── .env                         # Environment variables (never committed)
-
+```
 
 Environment Variables-
-Create a `.env` file in the project root:
+Create a '.env' file in the project root:
 
 env
 SECRET_KEY=your-secret-key-here
