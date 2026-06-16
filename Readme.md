@@ -117,22 +117,22 @@ bash:
 python -m venv venv
 venv\Scripts\activate        # Windows
 source venv/bin/activate     # Mac/Linux
-
+```
 #Install dependencies
 pip install -r requirements.txt
-
+```
 #Run the development server
 uvicorn app.main:app --reload
 Backend runs at `http://127.0.0.1:8000`
 API docs available at `http://127.0.0.1:8000/docs` (development only — disabled in production)
-
+```
 Frontend-
 bash:
 cd frontend
 npm install
 npm run dev
 Frontend runs at `http://localhost:5173`
-
+```
 Security Notes-
 - JWT tokens are stored in 'httpOnly' cookies — not accessible to JavaScript
 - All file uploads are validated via BioPython before processing
@@ -140,13 +140,13 @@ Security Notes-
 - Swagger UI and OpenAPI schema are disabled in production
 - Rate limiting applied to login, register, OTP verification, and file upload endpoints
 - CORS origins are configurable via environment variable
-
+```
 Deployment-
 Set the following in your production environment:
 env:
 ENVIRONMENT=production
 ALLOWED_ORIGINS=https://your-frontend-domain.com
-
+```
 The backend requires a persistent server (Render, Railway, Fly.io, etc.) since it runs a Python process continuously. The frontend can be deployed as a static site after running 'npm run build'.
 ```
 
