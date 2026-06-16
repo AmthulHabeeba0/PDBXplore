@@ -1,0 +1,16 @@
+
+.intro-section {
+  padding: 6rem 2rem;
+  max-width: 760px; margin: 0 auto;
+  text-align: center;
+}
+.intro-section h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 800;
+  color: #EEF4ED; line-height: 1.2; margin-bottom: 1.5rem;
+  letter-spacing: -0.02em;
+}
+.intro-section p {
+  font-size: 1.05rem; color: rgba(238,244,237,0.65);
+  line-height: 1.8;
+}

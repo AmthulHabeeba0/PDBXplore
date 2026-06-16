@@ -49,10 +49,10 @@ Phase 3 – Protein Search System (Completed)
 Allows users to discover proteins from the Protein Data Bank.
 Features implemented:
 - Search proteins by keyword or protein name  
-- Integration with the **RCSB Search API**  
+- Integration with the RCSB Search API 
 - Result pagination  
 - Return protein IDs and preview images  
-- Used by both the **Home page search bar** and **Explore Proteins page**  
+- Used by both the Home page search bar and Explore Proteins page
 
 
 Phase 4 – Structural Analysis Engine (Completed)
@@ -60,7 +60,7 @@ Backend implementation for protein structure validation.
 Features implemented:
 - Upload protein structure files (.pdb / .ent)  
 - Parsing protein structures using BioPython  
-- Computation of **phi (φ) and psi (ψ) backbone angles**  
+- Computation of phi (φ) and psi (ψ) backbone angles
 - Ramachandran plot generation  
 - Statistical analysis including:
   - Total residues analyzed
@@ -102,7 +102,6 @@ Phase 8 – React Frontend (In Progress)
 Frontend web application for user interaction.
 
 Planned features:
-
 Homepage
 - Protein search bar
 - Protein of the Day card
@@ -135,7 +134,6 @@ Backend:
 - BioPython
 - JWT Authentication
 - RCSB PDB API
-
 Frontend (Upcoming):
 - React.js
 - REST API integration

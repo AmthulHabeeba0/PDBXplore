@@ -1,0 +1,321 @@
+.protein-page {
+  padding-top: calc(var(--nav-h) + 40px);
+  padding-bottom: 96px;
+  min-height: 100vh;
+}
+
+.protein-container { max-width: 1200px; }
+
+/* Header */
+.protein-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 40px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.protein-id-badge {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.1rem;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  background: rgba(165, 190, 0, 0.1);
+  border: 1px solid rgba(165, 190, 0, 0.3);
+  border-radius: 10px;
+  padding: 10px 18px;
+  flex-shrink: 0;
+  align-self: flex-start;
+}
+
+.protein-title-block { flex: 1; min-width: 0; }
+
+.protein-title {
+  font-size: clamp(1.4rem, 2.5vw, 2rem);
+  font-weight: 800;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.protein-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Layout */
+.protein-layout {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.protein-left { display: flex; flex-direction: column; gap: 16px; }
+
+/* Visual */
+.protein-visual {
+  overflow: hidden;
+  padding: 0;
+  position: relative;
+}
+
+.protein-visual img {
+  width: 100%;
+  height: 240px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.protein-visual:hover img { transform: scale(1.04); }
+
+.protein-visual-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 60%, rgba(2,24,37,0.7) 100%);
+  pointer-events: none;
+}
+
+.protein-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* Quick stats */
+.quick-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.qs-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 18px 12px;
+  border-right: 1px solid var(--glass-border);
+  border-bottom: 1px solid var(--glass-border);
+  text-align: center;
+}
+
+.qs-item:nth-child(2),
+.qs-item:nth-child(4) { border-right: none; }
+
+.qs-item:nth-child(3),
+.qs-item:nth-child(4) { border-bottom: none; }
+
+.qs-value {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.qs-label {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* Enhanced meta */
+.enhanced-meta { padding: 20px 22px; }
+
+.em-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 12px;
+}
+
+/* Right column */
+.protein-right {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Detail section */
+.detail-section {
+  padding: 22px 24px;
+}
+
+.section-card-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 16px;
+}
+
+/* Info rows */
+.info-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 9px 0;
+  border-bottom: 1px solid rgba(66, 122, 161, 0.12);
+}
+
+.info-row:last-child { border-bottom: none; }
+
+.info-label {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  font-weight: 400;
+}
+
+.info-value {
+  font-size: 0.88rem;
+  color: var(--text);
+  text-align: right;
+  font-weight: 500;
+  word-break: break-word;
+}
+
+/* Keywords */
+.keywords-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Sequences */
+.sequence-block {
+  margin-bottom: 12px;
+}
+
+.seq-label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.seq-text {
+  display: block;
+  font-family: "Courier New", monospace;
+  font-size: 0.72rem;
+  color: var(--accent);
+  background: rgba(165, 190, 0, 0.06);
+  border: 1px solid rgba(165, 190, 0, 0.15);
+  border-radius: 6px;
+  padding: 10px 12px;
+  word-break: break-all;
+  white-space: pre-wrap;
+  line-height: 1.6;
+}
+
+.seq-toggle {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 0.74rem;
+  color: var(--accent);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  padding: 2px 0;
+  transition: opacity var(--t-fast);
+}
+.seq-toggle:hover { opacity: 0.75; }
+
+/* Molecular components */
+.components-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.comp-tag {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(66, 122, 161, 0.12);
+}
+
+.comp-tag:last-child { border-bottom: none; }
+
+.comp-name {
+  font-size: 0.88rem;
+  color: var(--text);
+  font-weight: 500;
+}
+
+/* Authors */
+.authors-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Citations */
+.citation-card {
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(66, 122, 161, 0.12);
+}
+
+.citation-card:last-child { border-bottom: none; }
+
+.cit-title {
+  font-size: 0.88rem;
+  color: var(--text);
+  line-height: 1.5;
+  margin-bottom: 8px;
+  font-weight: 400;
+}
+
+.cit-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.cit-doi {
+  color: var(--cta);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color var(--t-fast);
+}
+
+.cit-doi:hover { color: var(--cta-hover); }
+
+/* Error */
+.protein-error {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  text-align: center;
+  padding: 80px 24px;
+}
+
+.protein-error span { font-size: 3rem; }
+.protein-error h2 { font-size: 1.4rem; color: var(--text-muted); }
+.protein-error strong { color: var(--text); }
+
+@media (max-width: 900px) {
+  .protein-layout { grid-template-columns: 1fr; }
+  .protein-header { flex-direction: column; }
+}

@@ -1,0 +1,65 @@
+.workflow-section {
+  background: linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
+}
+
+.workflow-header {
+  text-align: center;
+  margin-bottom: 64px;
+}
+
+.workflow-steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  position: relative;
+}
+
+.workflow-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+.step-num {
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  margin-bottom: 12px;
+}
+
+.step-line {
+  width: 1px;
+  height: 24px;
+  background: linear-gradient(to bottom, var(--accent), var(--glass-border));
+  margin-bottom: 0;
+}
+
+.step-card {
+  padding: 24px 20px;
+  text-align: center;
+  width: 100%;
+}
+
+.step-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: var(--text);
+}
+
+.step-desc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.65;
+}
+
+@media (max-width: 900px) {
+  .workflow-steps { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 500px) {
+  .workflow-steps { grid-template-columns: 1fr; }
+}

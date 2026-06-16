@@ -1,0 +1,245 @@
+.explore-page {
+  padding-top: calc(var(--nav-h) + 60px);
+  padding-bottom: 96px;
+  min-height: 100vh;
+}
+
+.explore-container { max-width: 1280px; }
+
+/* Header */
+.explore-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+.explore-header .section-sub { margin: 0 auto; }
+
+/* Ensure the search bar container is the "Anchor" for the dropdown */
+/* --- SEARCH BAR LAYER FIX --- */
+.explore-search-bar {
+  display: flex;
+  gap: 12px;
+  max-width: 620px;
+  margin: 0 auto 40px;
+  align-items: flex-start;
+  position: relative;
+  z-index: 10000 !important; /* Forces search area above everything else */
+}
+
+.explore-search-bar .search-container-wrapper {
+  flex: 1;
+  position: relative;
+}
+
+.explore-search-bar .search-suggestions {
+  background: #021825 !important;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 10001 !important; 
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9);
+  border-radius: 10px;
+  margin-top: 5px;
+}
+
+
+/* Body layout */
+.explore-body {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+/* ─── SIDEBAR ─── */
+.explore-sidebar {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 14px;
+  padding: 20px 16px;
+  position: sticky;
+  top: calc(var(--nav-h) + 20px);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.sidebar-section { display: flex; flex-direction: column; gap: 6px; }
+
+.sidebar-heading {
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.filter-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  padding: 6px 8px;
+  border-radius: 8px;
+  transition: background var(--t-fast);
+}
+.filter-row:hover { background: rgba(165, 190, 0, 0.06); }
+
+.filter-checkbox {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent);
+  cursor: pointer;
+  flex-shrink: 0;
+  border-radius: 4px;
+}
+
+.filter-label {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  transition: color var(--t-fast);
+}
+.filter-row:has(.filter-checkbox:checked) .filter-label { color: var(--accent); }
+
+.filter-clear-btn {
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 107, 107, 0.3);
+  background: rgba(255, 107, 107, 0.06);
+  color: #ff9999;
+  cursor: pointer;
+  transition: all var(--t-fast);
+  text-align: center;
+}
+.filter-clear-btn:hover {
+  border-color: rgba(255, 107, 107, 0.6);
+  color: var(--danger);
+  background: rgba(255, 107, 107, 0.1);
+}
+
+/* ─── RESULTS GRID ─── */
+.explore-results {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 20px;
+}
+
+/* --- THE PROTEIN CARD (Fixed and Contained) --- */
+.pcard {
+  background: #13315C; /* Dark blue background */
+  border: 1px solid rgba(141, 169, 196, 0.12);
+  border-radius: 14px;
+  overflow: hidden; /* This traps the image inside the card */
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.pcard:hover {
+  transform: translateY(-6px);
+  border-color: rgba(165, 190, 0, 0.4);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* Forces the "ridiculous" images to stay in a square box */
+.pcard-img-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1; 
+  background: #0B2545;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid rgba(141, 169, 196, 0.1);
+}
+
+.pcard-img-fit {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Scales the protein to fit INSIDE the box */
+  padding: 15px; 
+  transition: transform 0.4s ease;
+}
+
+.pcard:hover .pcard-img-fit {
+  transform: scale(1.1);
+}
+
+.pcard-id-label {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: rgba(141, 169, 196, 0.4);
+  z-index: 2;
+}
+
+/* --- CARD TEXT CONTENT --- */
+.pcard-body {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.pcard-mini-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pcard-mini-id {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #8DA9C4;
+}
+
+.pcard-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #EEF4ED;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.6em; /* Keeps card heights consistent */
+}
+
+
+.pcard-cta-btn {
+  font-size: 0.8rem;
+  color: #c9e600;
+  font-weight: 700;
+  margin-top: auto;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Tags */
+.pcard-meta { display: flex; gap: 6px; }
+
+.pcard-meta-chip {
+  font-size: 0.6rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.pcard-org { background: rgba(141, 169, 196, 0.1); color: #8DA9C4; }
+.pcard-method { background: rgba(165, 190, 0, 0.1); color: #c9e600; }
+

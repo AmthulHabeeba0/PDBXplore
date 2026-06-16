@@ -1,0 +1,130 @@
+.settings-page {
+  padding-top: calc(var(--nav-h) + 60px);
+  padding-bottom: 96px;
+  min-height: 100vh;
+}
+
+.settings-container { max-width: 760px; }
+
+.settings-header { margin-bottom: 40px; }
+
+.settings-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.settings-card { padding: 28px 32px; }
+
+.settings-card-header {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.settings-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 2px solid var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.2rem;
+  color: var(--text);
+  flex-shrink: 0;
+}
+
+.settings-username {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--text);
+  margin-bottom: 3px;
+}
+
+.settings-email {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.settings-card-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 18px;
+  font-family: var(--font-display);
+}
+
+.settings-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-bottom: 14px;
+}
+
+.settings-btn {
+  padding: 11px 24px;
+  font-size: 0.88rem;
+}
+
+/* Danger */
+.settings-danger {
+  border-color: rgba(255, 107, 107, 0.25);
+}
+
+.danger-title { color: var(--danger) !important; }
+
+.settings-danger-desc {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  margin-bottom: 18px;
+  line-height: 1.6;
+}
+
+.btn-danger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 107, 107, 0.1);
+  border: 1px solid rgba(255, 107, 107, 0.35);
+  color: var(--danger);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.88rem;
+  padding: 10px 22px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background var(--t-fast), border-color var(--t-fast);
+}
+
+.btn-danger:hover {
+  background: rgba(255, 107, 107, 0.18);
+  border-color: rgba(255, 107, 107, 0.6);
+}
+
+/* Gate */
+.settings-gate {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 24px;
+}
+
+.settings-gate-card {
+  text-align: center;
+  padding: 56px 48px;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.settings-gate-card span { font-size: 3rem; }
+.settings-gate-card h2 { font-size: 1.4rem; }
+.settings-gate-card p { font-size: 0.9rem; color: var(--text-muted); }
