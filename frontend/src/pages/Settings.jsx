@@ -13,6 +13,7 @@ function Settings() {
   const [usernameMsg, setUsernameMsg] = useState(null);
   const [passwordMsg, setPasswordMsg] = useState(null);
   const [deleting, setDeleting] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState("");
 
   if (!user) return (
     <div className="settings-gate">
@@ -30,6 +31,7 @@ function Settings() {
       const res = await fetch(`${API_BASE}/user/update-username`, {
         method: "PUT",
         credentials: "include",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username })
       });
       const data = await res.json();
@@ -40,16 +42,18 @@ function Settings() {
   };
 
   const updatePassword = async () => {
+    if (!currentPassword) { setPasswordMsg({ ok: false, text: "Enter your current password" }); return; }
     if (!password) { setPasswordMsg({ ok: false, text: "Enter a new password" }); return; }
     try {
       const res = await fetch(`${API_BASE}/user/update-password`, {
         method: "PUT",
         credentials: "include",
-        body: JSON.stringify({ password })
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ current_password: currentPassword, password })
       });
       const data = await res.json();
       setPasswordMsg({ ok: res.ok, text: data.message || data.detail });
-      if (res.ok) setPassword("");
+      if (res.ok) { setPassword(""); setCurrentPassword(""); }
     } catch {
       setPasswordMsg({ ok: false, text: "Update failed" });
     }
@@ -117,6 +121,16 @@ function Settings() {
           {/* Update Password */}
           <div className="glass-card settings-card fade-up">
             <h3 className="settings-card-title">Update Password</h3>
+            <div className="settings-field">
+              <label className="auth-label">Current Password</label>
+              <input
+                className="input-field"
+                type="password"
+                value={currentPassword}
+                onChange={e => { setCurrentPassword(e.target.value); setPasswordMsg(null); }}
+                placeholder="Enter current password"
+              />
+            </div>
             <div className="settings-field">
               <label className="auth-label">New Password</label>
               <input

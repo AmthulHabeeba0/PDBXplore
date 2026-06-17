@@ -16,7 +16,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 if not SECRET_KEY:
     raise RuntimeError("SECRET_KEY not confiigured")
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 15    
+ACCESS_TOKEN_EXPIRE_MINUTES = 60   
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -64,4 +64,10 @@ def verify_token(
 
 def generate_otp():
     return f"{secrets.randbelow(900000) + 100000}"
+
+def hash_otp(otp: str) -> str:
+    return pwd_context.hash(otp)
+
+def verify_otp_code(plain_otp: str, hashed_otp: str) -> bool:
+    return pwd_context.verify(plain_otp, hashed_otp)
 

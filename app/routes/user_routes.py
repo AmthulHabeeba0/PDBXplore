@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from ..database import get_db
 from ..models import User
 from ..schemas import UpdateUsername, UpdatePassword
-from ..security import verify_token, hash_password
+from ..security import verify_token, hash_password,verify_password
 
 router = APIRouter(
     prefix="/user",
@@ -69,18 +69,14 @@ def update_password(
     db: Session = Depends(get_db),
     current_user: str = Depends(verify_token)
 ):
-
     user = db.query(User).filter(User.email == current_user).first()
-
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
-
+    if not verify_password(data.current_password, user.hashed_password):
+        raise HTTPException(status_code=401, detail="Current password is incorrect")
     user.hashed_password = hash_password(data.password)
-
     db.commit()
-
     return {"message": "Password updated successfully"}
-
 
 # ==========================
 # DELETE ACCOUNT

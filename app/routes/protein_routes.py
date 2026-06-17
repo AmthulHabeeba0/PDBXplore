@@ -1,18 +1,21 @@
-from fastapi import APIRouter, HTTPException, Depends
-from fastapi.responses import FileResponse
+from fastapi import APIRouter, HTTPException, Depends,Request
+from fastapi.responses import FileResponse,Response
 from fastapi.background import BackgroundTasks
-import requests
-import os
-import random
-import json
 from datetime import datetime, timedelta
 from sqlalchemy.orm import Session
 from app.security import verify_token
 from app.database import get_db
 from app.models import ProteinCache
+from app.main import limiter
+import datetime as dt
+import requests,re,uuid
+import os
+import random
+import json
 
 router = APIRouter(prefix="/protein", tags=["Protein"])
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RCSB_API_URL = "https://data.rcsb.org/rest/v1/core/entry/"
 SEARCH_API   = "https://search.rcsb.org/rcsbsearch/v2/query"
 CACHE_TTL_DAYS = 7
@@ -84,7 +87,8 @@ def get_cached_or_fetch(pdb_id: str, db: Session) -> dict:
 
 # ── SEARCH ───────────────────────────────────────────────────────────────────
 @router.get("/search/{query}")
-def search_proteins(query: str):
+@limiter.limit("10/minute")
+def search_proteins(query: str, request: Request, current_user: str = Depends(verify_token)):
     """Search by full text — handles special chars like TNF-alpha."""
     # Try full-text first, fall back to structure title search
     payload = {
@@ -124,9 +128,11 @@ def search_proteins(query: str):
 
 # ── PROTEIN OF THE DAY ───────────────────────────────────────────────────────
 @router.get("/protein-of-the-day")
-def protein_of_the_day(db: Session = Depends(get_db)):
+@limiter.limit("20/minute")
+def protein_of_the_day(request: Request, db: Session = Depends(get_db), current_user: str = Depends(verify_token)):
     sample_ids = ["1CRN","4HHB","1BNA","2DN2","3J3Q","6VXX","1MBN","2PTC","1A3N","3HMX"]
-    pdb_id = random.choice(sample_ids)
+    rng = random.Random(dt.date.today().toordinal())
+    pdb_id = rng.choice(sample_ids)
     try:
         data = get_cached_or_fetch(pdb_id.lower(), db)
     except Exception:
@@ -164,9 +170,10 @@ def protein_of_the_day(db: Session = Depends(get_db)):
 
 # ── PROTEIN DETAILS ──────────────────────────────────────────────────────────
 @router.get("/{pdb_id}")
-def get_protein_data(pdb_id: str, db: Session = Depends(get_db)):
+@limiter.limit("20/minute")
+def get_protein_data(pdb_id: str, request: Request, db: Session = Depends(get_db), current_user: str = Depends(verify_token)):
     pdb_id = pdb_id.lower()
-    if len(pdb_id) != 4:
+    if not re.fullmatch(r"[a-z0-9]{4}", pdb_id):
         raise HTTPException(status_code=400, detail="Invalid PDB ID format")
 
     metadata = get_cached_or_fetch(pdb_id, db)
@@ -319,14 +326,15 @@ def get_protein_data(pdb_id: str, db: Session = Depends(get_db)):
 @router.get("/download/{pdb_id}")
 def download_pdb(pdb_id: str, background_tasks: BackgroundTasks, current_user: str = Depends(verify_token)):
     pdb_id = pdb_id.lower()
-    if len(pdb_id) != 4:
+    if not re.fullmatch(r"[a-z0-9]{4}", pdb_id):
         raise HTTPException(status_code=400, detail="Invalid PDB ID format")
     response = requests.get(f"https://files.rcsb.org/download/{pdb_id}.pdb", timeout=15)
     if response.status_code != 200:
         raise HTTPException(status_code=404, detail="PDB file not found")
-    temp_dir  = "app/temp"
+    temp_dir = os.path.join(BASE_DIR, "temp")
     os.makedirs(temp_dir, exist_ok=True)
-    temp_path = os.path.join(temp_dir, f"{pdb_id}.pdb")
+    unique_name = f"{pdb_id}_{uuid.uuid4().hex}.pdb"
+    temp_path = os.path.join(temp_dir, unique_name)
     with open(temp_path, "wb") as f:
         f.write(response.content)
     background_tasks.add_task(os.remove, temp_path)

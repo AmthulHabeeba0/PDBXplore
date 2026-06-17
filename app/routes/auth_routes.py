@@ -4,6 +4,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from ..database import get_db
 from ..models import User
 from ..schemas import UserCreate
+from ..security import  hash_otp, verify_otp_code
 from ..security import hash_password, verify_password, create_access_token, verify_token
 from datetime import datetime, timedelta
 from fastapi.responses import JSONResponse
@@ -19,6 +20,13 @@ router = APIRouter(
     prefix="/auth",
     tags=["auth"]
 )
+
+def _fail_otp(user, db, detail):
+    user.otp_attempts += 1
+    if user.otp_attempts >= 5:
+        user.otp_locked_until = datetime.utcnow() + timedelta(minutes=15)
+    db.commit()
+    raise HTTPException(status_code=400, detail=detail)
 
 @router.post("/register")
 @limiter.limit("3/10minutes")
@@ -48,7 +56,7 @@ def register(
             return GENERIC_RESPONSE
 
         otp = generate_otp()
-        existing_user.otp_code = otp
+        existing_user.otp_code = hash_otp(otp)
         existing_user.otp_expiry = datetime.utcnow() + timedelta(minutes=10)
         existing_user.otp_attempts = 0
         existing_user.otp_locked_until = None
@@ -65,7 +73,7 @@ def register(
         username=user.username,
         email=user.email,
         hashed_password=hash_password(user.password),
-        otp_code=otp,
+        otp_code=hash_otp(otp),
         otp_expiry=datetime.utcnow() + timedelta(minutes=10),
         is_verified=False,
         otp_attempts=0,
@@ -110,23 +118,10 @@ def verify_otp(
         }
 
     if datetime.utcnow() > user.otp_expiry:
-        raise HTTPException(
-            status_code=400,
-            detail="OTP expired"
-        )
+        _fail_otp(user, db, "OTP expired")
 
-    if user.otp_code != data.otp:
-        user.otp_attempts += 1
-
-        if user.otp_attempts >= 5:
-            user.otp_locked_until = datetime.utcnow() + timedelta(minutes=15)
-
-        db.commit()
-
-        raise HTTPException(
-            status_code=400,
-            detail="Invalid OTP"
-        )
+    if not user.otp_code or not verify_otp_code(data.otp, user.otp_code):
+        _fail_otp(user, db, "Invalid OTP")
 
     # SUCCESS
     user.is_verified = True

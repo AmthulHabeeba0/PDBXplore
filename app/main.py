@@ -42,7 +42,7 @@ async def start_cleanup_task():
 def get_client_ip(request: Request) -> str:
     forwarded = request.headers.get("X-Forwarded-For")
     if forwarded:
-        return forwarded.split(",")[0].strip()
+        return forwarded.split(",")[-1].strip()
     return get_remote_address(request)
 
 

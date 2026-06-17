@@ -45,6 +45,7 @@ class UpdateUsername(BaseModel):
         return v
 
 class UpdatePassword(BaseModel):
+    current_password: str
     password: str
 
     @field_validator("password")
